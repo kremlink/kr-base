@@ -8,7 +8,7 @@
   "homepage": "https://github.com/kremlink/kr-base",
   "repository":{
     "type":"git",
-    "url":"git://github.com/kremlink/kr-base.git"
+    "url":"git+ssh://github.com/kremlink/kr-base.git"
   },
   "keywords":[
     "mini",
