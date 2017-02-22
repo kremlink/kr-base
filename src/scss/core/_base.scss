@@ -1,0 +1,46 @@
+$modules: () !default;
+
+@mixin exports($name) {
+  @if(not index($modules,$name))
+  {
+    $modules:append($modules,$name) !global;
+    @content;
+  }
+}
+
+@function needs-vendor($p){
+  $l-s:inspect($p);
+  $l-l:'user-select','transform','flex','inline-flex';
+  @each $i in $l-l
+  {
+    @if (str-index($l-s,$i)==1 and str-length($i)==str-length($l-s)){@return true;}
+  }
+  @return false;
+}
+
+@function vendor-args($arg,$vendor){
+  $l-result:();
+  @each $i in $arg
+  {
+    @if(needs-vendor($i)){$l-result:append($l-result,#{$vendor}$i);}
+    @else{$l-result:append($l-result, $i);}
+  }
+  @return $l-result;
+}
+
+@mixin vendor($property,$args,$vendors:('-webkit-', '-moz-', '-ms-', ''),$vendor-out:true){
+  @each $vendor in $vendors
+  {
+    $out:null;
+    @each $arg in $args{
+      @if(type-of($arg)==string){$out:($out,vendor-args(unquote($arg),$vendor));}
+      @else{$out:($out,vendor-args($arg,$vendor));}
+    }
+    @if($vendor-out){#{$vendor}#{$property}:$out;}
+    @else{#{$property}:$out;}
+  }
+}
+
+@include exports("@path:core\_base.scss"){/*@path:core\_base.scss*/
+
+}

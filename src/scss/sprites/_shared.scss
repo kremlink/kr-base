@@ -1,0 +1,15 @@
+$shared-sprite:(
+ img:'#{$path}shared-sprite.png',
+ items:(
+  browsers:(
+   width:30px,
+   height:120px,
+   pos:0px -43px
+  ),
+  iso:(
+   width:95px,
+   height:33px,
+   pos:0px 0px
+  )
+ )
+);

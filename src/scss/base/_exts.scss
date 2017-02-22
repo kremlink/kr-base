@@ -1,0 +1,22 @@
+@include exports("@path:base\_exts.scss"){/*@path:base\_exts.scss*/
+  %close-btn{
+    @include abs($t:5px,$r:5px);
+    width:20px;
+    height:20px;
+    @include sprite($n:close);
+  }
+
+  %fixed-pop{
+    position:fixed;
+    left:50%;
+    top:50%;
+    z-index:1;
+    display:none;
+    &.active{
+      display:block;
+    }
+    .close{
+      @extend %close-btn;
+    }
+  }
+}

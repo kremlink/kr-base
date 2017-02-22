@@ -1,0 +1,76 @@
+@include exports("@path:core\_exts.scss"){/*@path:core\_exts.scss*/
+  %br{
+    &:after{
+      content:'\a';
+      white-space:pre;
+    }
+  }
+
+  %clr{
+    &:after{
+      content:'';
+      clear:both;
+      display:block;
+    }
+  }
+
+  %loader{
+    background:url(../images/loader.gif) center no-repeat;
+  }
+
+  %bxz{
+    -moz-box-sizing:border-box;
+    box-sizing:border-box;
+  }
+
+  %just{
+    text-align:justify;
+    &:after{
+      content:'';
+      display:inline-block;
+      width:100%;
+    }
+  }
+
+  %a-grad{
+    text-decoration:none;
+    &:hover{
+      background:none;
+    }
+  }
+
+  %a-caller{
+    text-decoration:none;
+    display:inline-block;
+    cursor:pointer;
+    &:hover{
+      border-bottom-color:transparent;
+    }
+    &.active{
+      border-bottom-color:transparent;
+    }
+  }
+
+  %cross{
+    &:before,&:after{
+      content:'';
+      @include abs($l:50%,$t:50%);
+      @include trf('translate(-50%,-50%) rotate(45deg)');
+    }
+    &:after{
+      @include trf('translate(-50%,-50%) rotate(-45deg)');
+    }
+  }
+
+  %form-send{
+    &:after{
+      content:'';
+      @include abs($l:0,$r:0);
+      @extend %loader;
+    }
+    &.sending:after{
+      top:0;
+      bottom:0;
+    }
+  }
+}

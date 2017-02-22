@@ -1,0 +1,2 @@
+1. base-bb path: js/bf
+2. files from js/lib folders append after root files

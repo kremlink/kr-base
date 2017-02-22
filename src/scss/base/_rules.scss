@@ -1,0 +1,95 @@
+@include exports("@path:base\_rules.scss"){/*@path:base\_rules.scss*/
+  a{
+    color:getc(ref);
+    &:hover{
+      text-decoration:none;
+    }
+    &:focus{
+      outline:none;
+    }
+  }
+
+  .caller{
+    text-decoration:none;
+    border-bottom:1px dotted currentColor;
+    display:inline-block;
+    cursor:pointer;
+    &:hover,&.active{
+      border-bottom-color:transparent;
+    }
+  }
+
+  a.active,span.active{
+    cursor:default;
+    text-decoration:none;
+    border-bottom-color:transparent;
+  }
+
+  .clr{
+    clear:both;
+  }
+
+  p{
+    margin:0;
+  }
+
+  ul{
+    list-style:none;
+    margin:20px 0 0 13px;
+    padding:0;
+    line-height:18px;
+    li:before{
+      content:'\2022';
+      position:absolute;
+      margin:0 0 0 -9px;
+    }
+  }
+
+  .w{
+    width:$w;
+    margin:0 auto;
+  }
+
+  .logged{
+    display:none;
+    .user-logged &{
+      display:block;
+    }
+  }
+  .unlogged{
+    .user-logged &{
+      display:none;
+    }
+  }
+
+  input,textarea,select{
+
+  }
+
+  //----------------------------
+
+  html{
+    height:100%;
+  }
+
+  //@include modal('#wrap-wrap');
+
+  body{
+    height:100%;
+    font:13px Tahoma,sans-serif;
+  }
+
+  #wrap{
+    min-height:100%;
+    position:relative;
+    min-width:$w + 20px;
+  }
+
+  #main{
+
+  }
+
+  //--------------------
+
+
+}

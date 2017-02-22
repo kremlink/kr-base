@@ -1,0 +1,240 @@
+@mixin trf($arg,$what:''){
+  @if($what==''){@include vendor(transform,$arg,('-webkit-', ''));}
+  @else{@include vendor(transform-origin,$arg,('-webkit-', ''));}
+}
+
+@mixin trs($arg,$what:''){
+  @if($what=='')
+  {
+    @include vendor(transition,$arg,('-webkit-', ''));
+  }@else
+  {
+    @if($what=='de'){@include vendor(transition-delay,$arg,('-webkit-', ''));}
+    @if($what=='du'){@include vendor(transition-duration,$arg,('-webkit-', ''));}
+  }
+}
+
+@mixin flx($arg,$what){
+  @if($arg==display)
+  {
+    @include vendor($arg,$what,('-webkit-', ''),false);
+  }@else
+  {
+    @include vendor($arg,$what,('-webkit-', ''));
+  }
+}
+//---------
+@mixin modal($c){
+  body{
+    &.hidden{
+      overflow:hidden;
+    }
+    &.scroll #{unquote($c)}{
+      overflow-y:scroll;
+      height:auto;
+    }
+  }
+}
+
+@mixin plh(){
+  &::-webkit-input-placeholder{
+    @content;
+  }
+  &::-moz-placeholder{
+    @content;
+    opacity:1;
+  }
+  &:-ms-input-placeholder{
+    @content;
+  }
+}
+
+@mixin tri($d,$s1,$s2:0,$c:#000){
+  @if($d==top){
+    border-bottom:$s1 solid $c;
+    border-left:$s2 solid transparent;
+    border-right:$s2 solid transparent;
+  }
+  @else if ($d==bottom){
+    border-top:$s1 solid $c;
+    border-left:$s2 solid transparent;
+    border-right:$s2 solid transparent;
+  }
+  @else if ($d==left){
+    border-top:$s2 solid transparent;
+    border-bottom:$s2 solid transparent;
+    border-right:$s1 solid $c;
+  }
+  @else if ($d==right){
+    border-top:$s2 solid transparent;
+    border-bottom:$s2 solid transparent;
+    border-left:$s1 solid $c;
+  }
+}
+
+@mixin abs($l:auto,$t:auto,$r:auto,$b:auto,$p:absolute){
+  position:$p;
+  @if $l!=auto{left:$l;}
+  @if $t!=auto{top:$t;}
+  @if $r!=auto{right:$r;}
+  @if $b!=auto{bottom:$b;}
+}
+
+@mixin center($t:auto,$b:auto,$l:auto,$r:auto,$f:'',$p:absolute){
+  @if($t==auto and $b==auto and $l==auto and $r==auto)
+  {
+    @if($f=='')
+    {
+      @include abs($t:50%,$l:50%,$p:$p);
+      @include trf(translate(-50%,-50%));
+    }
+    @if($f==h)
+    {
+      @include abs($l:50%,$p:$p);
+      @include trf(translate(-50%,0));
+    }
+    @if($f==v)
+    {
+      @include abs($t:50%,$p:$p);
+      @include trf(translate(0,-50%));
+    }
+  }
+  @if($t!=auto and $b==auto and $l==auto and $r==auto)
+  {
+    @include abs($t:$t,$l:50%,$p:$p);
+    @include trf(translate(-50%,0));
+  }
+  @if($t==auto and $b!=auto and $l==auto and $r==auto)
+  {
+    @include abs($b:$b,$l:50%,$p:$p);
+    @include trf(translate(-50%,0));
+  }
+  @if($t==auto and $b==auto and $l!=auto and $r==auto)
+  {
+    @include abs($t:50%,$l:$l,$p:$p);
+    @include trf(translate(0,-50%));
+  }
+  @if($t==auto and $b==auto and $l==auto and $r!=auto)
+  {
+    @include abs($t:50%,$r:$r,$p:$p);
+    @include trf(translate(0,-50%));
+  }
+}
+
+@mixin center-str($h){
+  line-height:$h;
+  height:$h;
+}
+
+@mixin caller($c:#000,$h:auto){
+  border-bottom:1px dotted $c;
+  height:$h - 1px;
+  line-height:$h;
+  @extend %a-caller;
+}
+
+@mixin grad-ref($c:getc(ref),$b:0px,$h:1px,$d:false,$p1:1px,$p2:1px){
+  @if($d)
+  {
+    @include vendor(background,'linear-gradient(90deg,#{$c} #{$p1},transparent #{$p1},transparent #{$p2}) left calc(100% - #{$b})/#{$p1+$p2} #{$h} repeat-x',('-webkit-', ''),false);
+  }@else
+  {
+    @include vendor(background,'linear-gradient(90deg,#{$c},#{$c}) left calc(100% - #{$b})/100% #{$h} repeat-x',('-webkit-', ''),false);
+  }
+}
+
+@mixin anim($a){
+  -webkit-animation:$a;
+  animation:$a;
+}
+
+@mixin kfs($n){
+  @-webkit-keyframes #{$n}{
+    @content;
+  }
+  @keyframes #{$n}{
+    @content;
+  }
+}
+
+@mixin close-cross($d,$w,$h,$c){
+  position:absolute;
+  width:$d;
+  height:$d;
+  &:before,&:after{
+    width:$w;
+    height:$h;
+    background:$c;
+  }
+  @extend %cross;
+}
+//---------------
+@mixin sprite($n,$p:$shared-sprite,$d:true){
+  $l-data:map-get(map-get($p,items),$n);
+  $l-pos:null;
+  @if(type-of($l-data)==map)
+  {
+    $l-pos:map-get($l-data,pos);
+    @if($d)
+    {
+      width:map-get($l-data,width);
+      height:map-get($l-data,height);
+    }
+  }@else
+  {
+    $l-pos:$l-data;
+  }
+
+  @if($d)
+  {background:url(#{map-get($p,img)}) $l-pos no-repeat;}@else
+  {background-position:$l-pos;}
+}
+
+@mixin sprite-each($p,$b:null){//':before'
+  @each $cls,$bgp in map-get($p,items)
+  {
+    &.#{$cls}#{$b}{
+      @include sprite($n:$cls,$p:$p,$d:false);
+    }
+  }
+}
+
+@mixin sprite-shared($d,$p:$shared-sprite){
+  @each $x in $d
+  {
+    @if($x!=init)
+    {
+      #{$x}:map-get($p,$x);
+    }@else
+    {
+      background:url(map-get($p,img)) map-get($p,init) no-repeat;
+    }
+  }
+}
+
+@function sprite-data($d,$n:null,$p:$shared-sprite){
+  $l-arr:();
+
+  @each $x in $d
+  {
+    @if(not $n)
+    {
+      $l-arr:map-merge($l-arr,($x:map-get($p,$x)));
+    }
+    @else
+    {
+      $l-arr:map-merge($l-arr,($x:map-get(map-get(map-get($p,items),$n),$x)));
+    }
+  }
+
+  @if(length($l-arr)==1)
+  {
+    $l-arr:map-get($l-arr,$d);
+  }
+
+  @return $l-arr;
+}
+
+@include exports("@path:core\_mixins.scss"){/*@path:core\_mixins.scss*/
+
+}
