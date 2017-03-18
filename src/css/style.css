@@ -356,10 +356,9 @@ table {
   display: table; }
 
 /*@path:base\_mixins.scss*/
-/*@path:base\_exts.scss*/
 /*@path:base\_rules.scss*/
 a {
-  color: #005CA1; }
+  color: #cc0c39; }
   a:hover {
     text-decoration: none; }
   a:focus {
@@ -367,13 +366,11 @@ a {
 
 .caller {
   text-decoration: none;
-  border-bottom: 1px dotted #005CA1;
+  border-bottom: 1px dotted currentColor;
   display: inline-block;
   cursor: pointer; }
-  .caller:hover {
-    border-bottom-color: transparent !important; }
-  .caller.active {
-    border-bottom-color: transparent !important; }
+  .caller:hover, .caller.active {
+    border-bottom-color: transparent; }
 
 a.active, span.active {
   cursor: default;
@@ -420,40 +417,9 @@ body {
   position: relative;
   min-width: 1200px; }
 
+/*@path:base\_exts.scss*/
 /*@path:components\_footer.scss*/
 /*@path:components\_header.scss*/
-/*@path:components\_obsolete.scss*/
-#obsolete-notification {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 5;
-  background: #c9dfe1;
-  font-size: 14px; }
-  #obsolete-notification div {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    margin: -170px 0 0 -250px;
-    width: 500px; }
-    #obsolete-notification div p {
-      line-height: 18px; }
-    #obsolete-notification div a {
-      display: inline-block;
-      margin-top: 20px;
-      height: 30px;
-      line-height: 30px;
-      padding-left: 50px;
-      background: url(../images/browsers.png) no-repeat; }
-      #obsolete-notification div a ~ a {
-        background-position: 0 -30px; }
-      #obsolete-notification div a ~ a ~ a {
-        background-position: 0 -60px; }
-      #obsolete-notification div a ~ a ~ a ~ a {
-        background-position: 0 -90px; }
-
 /*@path:partials\_index.scss*/
 
 /*# sourceMappingURL=style.css.map */

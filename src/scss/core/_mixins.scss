@@ -157,6 +157,13 @@
   }
 }
 
+@mixin no-sel(){
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+}
+
 @mixin close-cross($d,$w,$h,$c){
   position:absolute;
   width:$d;

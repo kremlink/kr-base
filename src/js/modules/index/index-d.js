@@ -5,7 +5,7 @@
 }(function($,mgr){
  mgr.utils.extendData({
   obj:mgr.data,
-  field:'all',
+  field:'index',
   data:{
    smth:3
   }
