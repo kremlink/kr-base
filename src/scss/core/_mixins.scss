@@ -143,9 +143,16 @@
   }
 }
 
-@mixin anim($a){
-  -webkit-animation:$a;
-  animation:$a;
+@mixin anim($a,$t:''){
+  @if($t=='')
+  {
+    -webkit-animation:$a;
+    animation:$a;
+  }@else
+  {
+    -webkit-animation-#{$t}:$a;
+    animation-#{$t}:$a;
+  }
 }
 
 @mixin kfs($n){
