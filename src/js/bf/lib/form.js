@@ -30,6 +30,7 @@
    sendingEvent:'sending',
    sentEvent:'sent',
    failEvent:'fail',
+   validData:'valid',
    ajax:true,
    url:null,//if undef -> opts.form has to be <form action="url">
    type:'GET',
@@ -197,9 +198,10 @@
    }
 
    if((opts.validate&&self.options.funcs.validate.apply(self,[{
-    form:self.props.form,
-    sender:self.props.sender,
-    blockFlag:self.props.blockFlag
+     form:self.props.form,
+     sender:self.props.sender,
+     blockFlag:self.props.blockFlag,
+     data:self.options.validData
    }])||!opts.validate)&&$.isEmptyObject(self.props.blockFlag))
    {
     if(opts.caller)

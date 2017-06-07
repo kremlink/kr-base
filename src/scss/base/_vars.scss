@@ -18,6 +18,10 @@ $colors:(
   @return 'Roboto',sans-serif;
 }
 
+@function m-prop($arg,$p:12){
+  @return $arg*1vw/$p;
+}
+
 @include exports("@path:base\_vars.scss"){/*@path:base\_vars.scss*/
 
 }

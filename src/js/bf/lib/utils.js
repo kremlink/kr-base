@@ -31,8 +31,7 @@
 
     check.each(function(){
      var obj=$(this),
-         reg=obj.data('valid'),
-         ph=obj.data('placeholder');
+         reg=obj.data(opts.data);
      
      if(obj.is('select'))
      {
@@ -43,10 +42,7 @@
       }
      }else
      {
-      if(block(obj)||!ignore(obj)
-       &&(reg&&!(new RegExp(reg)).test($.trim(this.value))
-       ||reg&&ph&&ph==$.trim(this.value)
-       ))
+      if(block(obj)||!ignore(obj)&&(reg&&!(new RegExp(reg)).test($.trim(this.value))))
       {
        flag=false;
        error(obj);
@@ -66,7 +62,7 @@
   value:function(opts){
    var s=opts.obj.is('input,textarea,select')?'val':'text';
 
-   if(opts.value==undefined)
+   if(opts.value===undefined)
     return opts.obj[s]();else
     opts.obj[s](opts.value);
   },

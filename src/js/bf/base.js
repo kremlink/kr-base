@@ -217,7 +217,7 @@
     if($.type(own.data)=='string')
     {
      d=this.get('data'+sp+own.data);
-     return own.call||own.lib?this.utils.jq({mgr:this,obj:$.extend(true,{},d)}):d;
+     return own.call||own.lib?this.utils.jq({obj:$.extend(true,{},d)}):d;
     }else
     {
      return own.data;
@@ -323,7 +323,7 @@
       this.on(x,opts.on_[x]);
     }
 
-    opts.mgr.utils.jq({mgr:opts.mgr,obj:this._inner.extra,$:true});
+    opts.mgr.utils.jq({obj:this._inner.extra});
 
     delete opts.path_;
     delete opts.on_;
@@ -341,19 +341,18 @@
     $.extend(true,opts.obj,d);
    },
    jq:function(opts){
-    var utils=opts.mgr.utils,
-     obj=opts.obj;
+    var obj=opts.obj;
 
     if($.isPlainObject(obj))
     {
      for(var x in obj)
      {
-      if(obj.hasOwnProperty(x)&&utils.type(x)=='jq')
+      if(obj.hasOwnProperty(x)&&this.type(x)=='jq')
       {
-       utils.jqTypes({
+       this.jqTypes({
         obj:obj,
-        val:opts.$?x:utils.jqTest({obj:obj,val:x}),
-        $:opts.$});
+        val:x
+       });
       }
      }
     }
@@ -361,29 +360,20 @@
     if($.type(obj)=='array')
     {
      for(var i=0;i<obj.length;i++)
-      utils.jqTypes({
+      this.jqTypes({
        obj:obj,
-       val:i,
-       $:opts.$
+       val:i
       });
     }
 
     return obj;
-   },
-   jqTest:function(opts){
-    var s=opts.val.slice(1);
-
-    opts.obj[s]=opts.obj[opts.val];
-    delete opts.obj[opts.val];
-
-    return s;
    },
    jqTypes:function(opts){
     var obj=opts.obj,
      s=opts.val;
 
     if($.type(obj[s])=='array'||$.isPlainObject(obj[s]))
-     opts.mgr.utils.jq({obj:obj[s],$:opts.$});
+     this.jq({obj:obj[s]});
 
     if($.type(obj[s])=='string')
      obj[s]=$(obj[s]);
