@@ -358,7 +358,7 @@ table {
 /*@path:base\_mixins.scss*/
 /*@path:base\_rules.scss*/
 a {
-  color: #cc0c39; }
+  color: #f00; }
   a:hover {
     text-decoration: none; }
   a:focus {
