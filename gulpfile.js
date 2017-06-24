@@ -14,7 +14,7 @@ var gulp=require('gulp'),
  open=require('open'),
  zip=require('gulp-zip'),
  dl=require('gulp-download'),
- unzip=require('gulp-unzip');
+ unzip=require('gulp-unzip'),
  
  flag='src',//flag='src' or flag='dest'
  options={
@@ -136,7 +136,10 @@ function sassAll(e){
    });
 
    partials.forEach(function(partial){
-    fs.appendFileSync(allFile,'@import \''+path.basename(partial,path.extname(partial)).substring(1)+'\';\n');
+	var s=fs.readFileSync(directory+'/'+partial,'utf8');
+	
+	if(!~s.indexOf('@ignore'))
+     fs.appendFileSync(allFile,'@import \''+path.basename(partial,path.extname(partial)).substring(1)+'\';\n');
    });
   });
  });
@@ -146,11 +149,15 @@ function data(){
  return gulp.src(options.src.css.data)
   .pipe(foreach(function(stream,file){
    var p=file.path,
-       sb=p.substring(p.indexOf(options.src.css.baseStr)+options.src.css.baseStr.length);
+       sb=p.substring(p.indexOf(options.src.css.baseStr)+options.src.css.baseStr.length),
+	   s=String(file.contents);
     
-    file.contents=new Buffer(String(file.contents)
-    .replace(/@include exports\(.*\)\{(\/\*.*\*\/)*/,'@include exports("@path:'+sb+'"){/*@path:'+sb+'*/')
-    .replace(/\/\*@path.*\*\//,'/*@path:'+sb+'*/'));
+	if((!~s.indexOf('@ignore')))
+	{
+	 file.contents=new Buffer(s.replace(/@include exports\S+/,'@include exports("@path:'+sb+'"){/*@path:'+sb+'*/')
+     .replace(/\/\*@path\S\*\//,'/*@path:'+sb+'*/'));	
+	}
+    
    return stream;
   }))
   .pipe(gulp.dest(options.src.css.base));
