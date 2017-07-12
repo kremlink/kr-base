@@ -155,7 +155,7 @@ function data(){
 	if((!~s.indexOf('@ignore')))
 	{
 	 file.contents=new Buffer(s.replace(/@include exports\S+/,'@include exports("@path:'+sb+'"){/*@path:'+sb+'*/')
-     .replace(/\/\*@path\S\*\//,'/*@path:'+sb+'*/'));	
+     .replace(/\/\*@path\S*\//,'/*@path:'+sb+'*/'));
 	}
     
    return stream;
