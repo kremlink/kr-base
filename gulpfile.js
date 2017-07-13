@@ -1,5 +1,5 @@
 var gulp=require('gulp'),
- minifycss=require('gulp-minify-css'),
+ cleanCSS=require('gulp-clean-css'),
  uglify=require('gulp-uglify'),
  rename=require('gulp-rename'),
  concat=require('gulp-concat'),
@@ -7,7 +7,7 @@ var gulp=require('gulp'),
  fs=require('fs'),
  path=require('path'),
  glob=require('glob'),
- foreach=require('gulp-foreach'),
+ flatmap=require('gulp-flatmap'),
  fileinclude=require('gulp-file-include'),
  del=require('del'),
  buffer=require('vinyl-buffer'),
@@ -147,7 +147,7 @@ function sassAll(e){
 
 function data(){
  return gulp.src(options.src.css.data)
-  .pipe(foreach(function(stream,file){
+  .pipe(flatmap(function(stream,file){
    var p=file.path,
        sb=p.substring(p.indexOf(options.src.css.baseStr)+options.src.css.baseStr.length),
 	   s=String(file.contents);
@@ -227,7 +227,7 @@ gulp.task('css',function(){
 gulp.task('css-min',function(){
  return gulp.src(options.src.css.min)
   .pipe(rename({suffix:'.min'}))
-  .pipe(minifycss())
+  .pipe(cleanCSS())
   .pipe(gulp.dest(options.dest.css));
 });
 
@@ -294,6 +294,7 @@ gulp.task('ini',function(){
    stream.on('end',function(e){
     del(folder);
     del('.gitignore');
+	del('gulpfile-ini.js');
    });
  });
 });
@@ -318,7 +319,7 @@ gulp.task('sprite',function(){
    cssTemplate:'tmpl.mustache'
   }))
   .pipe(buffer())
-  .pipe(foreach(function(stream,file){
+  .pipe(flatmap(function(stream,file){
    var dest;
 
    if(path.extname(file.path)==='.scss')
