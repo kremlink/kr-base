@@ -176,7 +176,7 @@
   @extend %cross;
 }
 //---------------
-@mixin sprite($n,$p:$shared-sprite,$d:true){
+@mixin sprite($n,$d:true,$p:$shared-sprite){
   $l-data:map-get(map-get($p,items),$n);
   $l-pos:null;
   @if(type-of($l-data)==map)
