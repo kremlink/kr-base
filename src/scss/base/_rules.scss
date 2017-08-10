@@ -80,6 +80,7 @@
     height:100%;
     font:14px/18px font();
     @include flx(display,flex);//for ie's footer bottom pos
+    @include flx(flex-flow,'column nowrap');
   }
 
   #wrap{
@@ -89,6 +90,7 @@
     width:100%;
     @include flx(display,flex);
     @include flx(flex-flow,'column nowrap');
+    @include flx(flex,'1 0 auto');
   }
 
   #main{
