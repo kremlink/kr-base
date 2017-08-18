@@ -413,7 +413,9 @@ body {
   height: 100%;
   font: 14px/18px "Open Sans", sans-serif;
   display: -webkit-flex;
-  display: flex; }
+  display: flex;
+  -webkit-flex-flow: column nowrap;
+  flex-flow: column nowrap; }
 
 #wrap {
   min-height: 100%;
@@ -423,7 +425,9 @@ body {
   display: -webkit-flex;
   display: flex;
   -webkit-flex-flow: column nowrap;
-  flex-flow: column nowrap; }
+  flex-flow: column nowrap;
+  -webkit-flex: 1 0 auto;
+  flex: 1 0 auto; }
 
 #main {
   -webkit-flex: 1 0 auto;

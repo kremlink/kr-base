@@ -21,8 +21,8 @@ var gulp=require('gulp'),
   url:'https://github.com/kremlink/kr-base/archive/master.zip',
   src:{
    html:{
-    src:'src/html/*.html',
-    scripts:'src/html/components/src.html'
+    src:'src/_dev/html/*.html',
+    scripts:'src/_dev/html/components/src.html'
    },
    js:{
     src:'src/js/**/*.js',
@@ -50,21 +50,22 @@ var gulp=require('gulp'),
    css:{
     src:'src/css/*',
     min:'src/css/style.css',
-    data:'src/scss/**/*.*',
-    base:'src/scss/',
-    baseStr:'src\\scss\\',
+    data:'src/_dev/scss/**/*.*',
+    base:'src/_dev/scss/',
+    baseStr:'src\\_dev\\scss\\',
      include:{
-     all:'src/scss/!(core|base)/',
-     components:'src/scss/components/',
-     partials:'src/scss/partials/',
-     sprites:'src/scss/sprites/'
+     all:'src/_dev/scss/!(core|base)/',
+     components:'src/_dev/scss/components/',
+     partials:'src/_dev/scss/partials/',
+     sprites:'src/_dev/scss/sprites/'
     },
     allName:'_all.scss'
    },
    imgs:{
     src:'src/images/**/*.*',
+	spriteBits:'src/_dev/sprites/',
     base:'src/images/',
-    spriteProc:'src/scss/sprites'
+    spriteProc:'src/_dev/scss/sprites'
    },
    fonts:'src/fonts/**/*.*'
   },
@@ -79,9 +80,9 @@ var gulp=require('gulp'),
    fonts:'dest/fonts/'
   },
   watch:{
-   html:'src/html/**/*.html',
+   html:'src/_dev/html/**/*.html',
    js:'src/js/**/*.js',
-   css:'src/css/*.scss',
+   css:'src/css/*.css',
    img:'src/images/**/*.*',
    fonts:'src/fonts/**/*.*'
   },
@@ -99,7 +100,8 @@ var gulp=require('gulp'),
    dest:'src/js'
   },
   zip:{
-   src:['src/!(.idea|scss|html)'],
+   src:['src/*'],
+   srcOnly:['src/!(.idea|_dev)'],
    dest:'./'
   }
  };
@@ -113,7 +115,7 @@ function getArg(key){
 
 function sassAll(e){
  var name=options.src.css.allName,
-     a=(typeof e=='string'?e:null)||getArg('--p');
+     a=(typeof e==='string'?e:null)||getArg('--p');
  
  if(!(a in options.src.css.include))
   a='all';
@@ -163,6 +165,24 @@ function data(){
   .pipe(gulp.dest(options.src.css.base));
 }
 
+function unignore(all){
+ var stream=gulp.src(options.src.css.data)
+  .pipe(flatmap(function(stream,file){
+   var s=String(file.contents);
+    
+   file.contents=new Buffer(s.replace(/@ignore/,''));
+    
+   return stream;
+  }))
+  .pipe(gulp.dest(options.src.css.base));
+  
+  stream.on('end',function(){
+   all();
+  });
+  
+  return stream;
+}
+
 function jsAdd(){//e.type=changed|added|deleted
  var scripts='';
  
@@ -178,7 +198,7 @@ function jsAdd(){//e.type=changed|added|deleted
 gulp.task('watch',function(){
   gulp.watch(options.watch.html,['html']);
   
-  if(flag=='dest')
+  if(flag==='dest')
   {
    gulp.watch(options.watch.css,['css']);
    gulp.watch(options.watch.js,['js']);
@@ -201,9 +221,13 @@ gulp.task('s-add',function(){
  sassAll();
  data();
 });
+gulp.task('s-all',sassAll);
+gulp.task('s-unign',function(){
+ return unignore(sassAll);
+});
 
 gulp.task('fonts',function(){
- if(flag=='dest')
+ if(flag==='dest')
  {
   return gulp.src(options.src.fonts)
    .pipe(gulp.dest(options.dest.fonts));
@@ -217,7 +241,7 @@ gulp.task('html',function(){
 });
 
 gulp.task('css',function(){
- if(flag=='dest')
+ if(flag==='dest')
  {
   return gulp.src(options.src.css.src)
    .pipe(gulp.dest(options.dest.css));
@@ -232,7 +256,7 @@ gulp.task('css-min',function(){
 });
 
 gulp.task('js',function(){
- if(flag=='dest')
+ if(flag==='dest')
  {
   return gulp.src(options.src.js.src)
    .pipe(gulp.dest(options.dest.js.src));
@@ -276,8 +300,8 @@ gulp.task('zip',function(){
  var a=getArg('--p')||'',
   today=new Date(),dd=today.getDate(),mm=today.getMonth()+1,yyyy=today.getFullYear();
  
- return gulp.src(options.zip.src)
-  .pipe(zip((a?a+'-':'')+((dd<10?'0'+dd:dd)+'.'+(mm<10?'0'+mm:mm)+'.'+yyyy)+'.zip'))
+ return gulp.src(options.zip[a?'srcOnly':'src'],{dot:true})
+  .pipe(zip(((dd<10?'0'+dd:dd)+'.'+(mm<10?'0'+mm:mm)+'.'+yyyy)+'.zip'))
   .pipe(gulp.dest(options.zip.dest));
 });
 
@@ -300,9 +324,9 @@ gulp.task('ini',function(){
 });
 
 gulp.task('img',function(){
- if(flag=='dest')
+ if(flag==='dest')
  {
-  return gulp.src(options.src.img.src)
+  return gulp.src(options.src.imgs.src)
    .pipe(gulp.dest(options.dest.img));
  }
 });
@@ -310,7 +334,7 @@ gulp.task('img',function(){
 gulp.task('sprite',function(){
  var a=getArg('--p')||'shared';
  
- return gulp.src(options.src.imgs.base+a+'-sprite/*.png')
+ return gulp.src(options.src.imgs.spriteBits+a+'-sprite/*.png')
   .pipe(spritesmith({
    imgName:a+'-sprite.png',
    cssName:'_'+a+'.scss',
