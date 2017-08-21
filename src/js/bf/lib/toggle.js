@@ -34,6 +34,8 @@
    hideAllEvent:'hideAll',
    keydown:'keydown.toggle',
    click:'click.toggle',
+   active:[],
+   ignore:'',
    esc:false,
    alone:false,
    aloneFlag:false,//make 1 or callers.length fake pop(s) for all callers when no pops provided; true means 1
@@ -184,7 +186,7 @@
     self.props.delegateContainer.on(self.options.click,self.options.callers.selector,function(e){
      var obj=$(this);
 
-     if(!$(e.target).closest(self.options.callers.ignore).length)
+     if(!$(e.target).closest(self.options.ignore).length)
      {
       self.show({
        caller:obj,
@@ -203,15 +205,18 @@
 
      self.props.shown[i]=0;
      obj.on(self.options.click,function(e){
-      self.show({
-       index:i,
-       caller:obj,
-       settingActive:false,
-       activeClick:obj.hasClass(self.options.activeClass),
-       blockedClick:obj.hasClass(self.options.disabledClass)
-      });
-      
-      e.preventDefault();
+      if(!$(e.target).closest(self.options.ignore).length)
+      {
+       self.show({
+        index:i,
+        caller:obj,
+        settingActive:false,
+        activeClick:obj.hasClass(self.options.activeClass),
+        blockedClick:obj.hasClass(self.options.disabledClass)
+       });
+
+       e.preventDefault();
+      }
      });
     });
    }
@@ -384,12 +389,22 @@
         self.props.delegateContainer.find(self.options.callers.selector):
         self.props.callers;
 
-   callers.each(function(i){
-    var obj=$(this);
+   if(!self.options.active.length)
+   {
+    callers.each(function(i){
+     var obj=$(this);
 
-    if(obj.hasClass(self.options.activeClass))
-     self.show({index:i,caller:obj,settingActive:true});
-   });
+     if(obj.hasClass(self.options.activeClass))
+      self.show({index:i,caller:obj,settingActive:true});
+    });
+   }else
+   {
+    if(!self.props.delegateCallers)
+    {
+     for(var i=0;i<self.options.active.length;i++)
+      self.show({index:i,caller:callers.eq(self.options.active[i])});
+    }
+   }
   }
  });
   
