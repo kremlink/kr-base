@@ -406,6 +406,14 @@ ul {
 .user-logged .unlogged {
   display: none; }
 
+.safe-hide-svg {
+  position: absolute;
+  left: 0;
+  top: -100px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden; }
+
 html {
   height: 100%; }
 

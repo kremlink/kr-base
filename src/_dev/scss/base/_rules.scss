@@ -68,6 +68,13 @@
 
   }
 
+  .safe-hide-svg{
+    @include abs($l:0,$t:-100px);
+    width:1px;
+    height:1px;
+    overflow:hidden;
+  }
+
   //----------------------------
 
   html{
