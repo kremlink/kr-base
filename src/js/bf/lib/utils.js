@@ -148,6 +148,29 @@
     return opts.obj[s]();else
     opts.obj[s](opts.value);
   },
+  imgsReady:function(opts){
+   var callback=opts.callback||function(){},
+    src=$.type(opts.src)==='array'?opts.src:[opts.src],
+    img,
+    imgs;
+
+   for(var i=0;i<src.length;i++)
+   {
+    img=$('<img />').attr('src',src[i]);
+    imgs=imgs?imgs.add(img):img;
+   }
+
+   imgs.imagesLoaded(function(){
+    if(opts.elements)
+    {
+     opts.elements.each(function(i){
+      $(this).css('backgroundImage','url('+src[i]+')');
+     });
+    }
+    callback(imgs);
+    imgs.remove();
+   });
+  },
   debounce:function(func,wait,immediate){
    var timeout,args,context,timestamp,result;
 
