@@ -357,10 +357,15 @@ gulp.task('ssprite',function(){
   }))
  .pipe(cheerio({
   run:function($,file){
-   $('[fill]').removeAttr('fill');
-   $('[style]').removeAttr('style');
-   $('[class]').removeAttr('class');
-   $('style,title').remove();
+   if(!/^no-/.test(file.relative))
+   {
+    $('[fill]').removeAttr('fill');
+    $('[style]').removeAttr('style');
+    $('[class]').removeAttr('class');
+    $('style,title').remove();
+   }
+
+   $('#Слой_2,#svg-export').removeAttr('id');
   },
   parserOptions:{xmlMode:true}
  }))
