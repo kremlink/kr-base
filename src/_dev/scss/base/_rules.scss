@@ -32,40 +32,113 @@
   }
 
   p{
-    margin:0;
+    margin:22px 0 0 0;
+    &.special{
+      font-style:italic;
+      background:#f8f8f8;
+      margin-top:30px;
+      border-radius:3px;
+      padding:32px 54px;
+      font-size:15px;
+      line-height:24px;
+      color:getc(font);
+    }
+    &:first-child{
+      margin-top:0;
+    }
+  }
+
+  table{
+    border-collapse:collapse;
+    margin-top:18px;
+    border-spacing:4px;
+    tr{
+      &:nth-child(2n+1) td{
+        background:getc(t-bg);
+      }
+    }
+    th,td{
+      padding:10px;
+      text-align:left;
+    }
+    th{
+      background:getc(h);
+      color:#fff;
+    }
+    td{
+      background:#fff;
+    }
+  }
+
+  ul,ol{
+    list-style:none;
+    margin:18px 0 0 40px;
+    padding:0;
+    li{
+      margin-top:10px;
+      &:before{
+        content:'';
+        color:getc(el);
+        position:absolute;
+      }
+    }
+  }
+
+  ol{
+    counter-reset:ctr;
+    li{
+      counter-increment:ctr;
+      &:before{
+        content:counter(ctr);
+        font-weight:700;
+        margin-left:-20px;
+      }
+    }
   }
 
   ul{
-    list-style:none;
-    margin:20px 0 0 13px;
-    padding:0;
-    line-height:18px;
-    li:before{
-      content:'\2022';
-      position:absolute;
-      margin:0 0 0 -9px;
+    li{
+      &:before{
+        width:4px;
+        height:4px;
+        border-radius:3px;
+        background:#000;
+        margin-top:9px;
+        margin-left:-16px;
+      }
     }
   }
 
   .w{
-    width:$w;
+    min-width:$miw;
+    max-width:$maw;
+    padding:0 $pd;
     margin:0 auto;
+    @extend %bxz;
   }
 
-  .logged{
-    display:none;
-    .user-logged &{
-      display:block;
+  h1{
+
+  }
+
+  h2{
+
+  }
+
+  h3{
+
+  }
+
+  input[type=text],input[type=number],textarea,select{
+    background:#fff;
+    border-radius:3px;
+    border:1px solid getc(bd);
+    padding-left:10px;
+    height:36px;
+    @extend %bxz;
+    &.error{
+      border:1px solid #f00;
     }
-  }
-  .unlogged{
-    .user-logged &{
-      display:none;
-    }
-  }
-
-  input,textarea,select{
-
   }
 
   .safe-hide-svg{
@@ -93,7 +166,7 @@
   #wrap{
     min-height:100%;
     position:relative;
-    min-width:$w + 20px;
+    min-width:$miw;
     width:100%;
     @include flx(display,flex);
     @include flx(flex-flow,'column nowrap');

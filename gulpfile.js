@@ -359,7 +359,7 @@ gulp.task('ssprite',function(){
   run:function($,file){
    if(!/^no-/.test(file.relative))
    {
-    $('[fill]').removeAttr('fill');
+	$('[fill]').removeAttr('fill');
     $('[style]').removeAttr('style');
     $('[class]').removeAttr('class');
     $('style,title').remove();
