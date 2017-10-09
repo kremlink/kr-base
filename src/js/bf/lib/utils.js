@@ -98,7 +98,7 @@
   form:{
    validate:function(opts){
     var flag=true,
-        check=opts.form?opts.form.find('input[type=text],input[type=password],textarea,select'):opts.check,
+        check=opts.form?opts.form.find(opts.inputs):opts.check,
         ignore=opts.ignore?opts.ignore:function(){return false;},
         block=opts.block?opts.block:function(){return false;},
         error=opts.error?opts.error:function(){};
