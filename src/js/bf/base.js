@@ -127,7 +127,7 @@
      tmp=tmp[arr[i]];
     }else
     {
-     if(arr[0]=='lib')
+     if(arr[0]==='lib')
       throw new Error('[FW] Lib function not found:'+st);else
       return null;
     }
@@ -139,7 +139,7 @@
    var ovr=this.settings.overrideData,
     dest,
     destroy=function(obj){
-     if(obj[destr]&&$.type(dest.tmp[obj[destr]])=='function')
+     if(obj[destr]&&$.type(dest.tmp[obj[destr]])==='function')
       obj[destr]();
     };
 
@@ -148,7 +148,7 @@
    dest=this._core.getDestination.bind(this)({s:st});
    this.toggleNotifications({overrideData:ovr});
 
-   if($.type(dest.tmp[dest.name])=='array')
+   if($.type(dest.tmp[dest.name])==='array')
    {
     for(var i=0;i<dest.tmp[dest.name].length;i++)
      destroy(dest.tmp[dest.name][i]);
@@ -193,16 +193,16 @@
      own[x]=opts[x];
    }
 
-   if($.type(own.data)=='string'&&!own.dest)
+   if($.type(own.data)==='string'&&!own.dest)
     own.dest=own.data;
 
    if(own.constr)
     own.call=true;
 
-   if(own.call||$.type(own.object)!='string')
+   if(own.call||$.type(own.object)!=='string')
    {
     own.lib=false;
-    if(!('set' in own)&&!own.dest)
+    if(own.call||!('set' in own)&&!own.dest)
      own.set=false;
    }
 
@@ -214,7 +214,7 @@
    data=(function(){
     var d;
 
-    if($.type(own.data)=='string')
+    if($.type(own.data)==='string')
     {
      d=this.get('data'+sp+own.data);
      return own.call||own.lib?this.utils.jq({obj:$.extend(true,{},d)}):d;
@@ -226,7 +226,7 @@
 
    if(!own.lib)
    {
-    if($.type(own.object)=='function'&&own.call)
+    if($.type(own.object)==='function'&&own.call)
     {
      var t={
       data:data,
@@ -280,7 +280,7 @@
      dest.tmp[dest.name]=obj;
     }else
     {
-     if(!dest.tmp[dest.name]||$.type(dest.tmp[dest.name])!='array')
+     if(!dest.tmp[dest.name]||$.type(dest.tmp[dest.name])!=='array')
       dest.tmp[dest.name]=[obj];else
       dest.tmp[dest.name].push(obj);
     }
@@ -347,7 +347,7 @@
     {
      for(var x in obj)
      {
-      if(obj.hasOwnProperty(x)&&this.type(x)=='jq')
+      if(obj.hasOwnProperty(x)&&this.type(x)==='jq')
       {
        this.jqTypes({
         obj:obj,
@@ -357,7 +357,7 @@
      }
     }
 
-    if($.type(obj)=='array')
+    if($.type(obj)==='array')
     {
      for(var i=0;i<obj.length;i++)
       this.jqTypes({
@@ -372,10 +372,10 @@
     var obj=opts.obj,
      s=opts.val;
 
-    if($.type(obj[s])=='array'||$.isPlainObject(obj[s]))
+    if($.type(obj[s])==='array'||$.isPlainObject(obj[s]))
      this.jq({obj:obj[s]});
 
-    if($.type(obj[s])=='string')
+    if($.type(obj[s])==='string')
      obj[s]=$(obj[s]);
    },
    type:function(obj){
