@@ -230,9 +230,11 @@
     {
      var t={
       data:data,
-      extra:own.extra,
       name:own.data
      };
+
+     if(own.extra)
+      t.extra=own.extra;
 
      if(own.constr)
       obj=new own.object(t);else
@@ -253,14 +255,12 @@
      throw new Error('[FW] No data provided ('+own.object+': '+own.data+')');
 
     obj=new Tmp();
-    obj.init(this.utils.init.call(obj,$.extend(
-     true,
-     {mgr:this},
+    this.utils.init.call(obj,$.extend(
      data,
-     {on_:own.on},
-     {path_:own.dest},
+     {on_:own.on,path_:own.dest},
      own.extra
-    )));
+    ));
+    obj.init();
    }
 
    if(own.set)
@@ -312,10 +312,7 @@
  $.extend(Manager.prototype,{
   utils:{
    init:function(opts){
-    this._inner={
-     PATH:opts.path_,
-     extra:$.extend(true,{},opts.extra_)
-    };
+    this.data=opts;
 
     for(var x in opts.on_)
     {
@@ -323,13 +320,9 @@
       this.on(x,opts.on_[x]);
     }
 
-    opts.mgr.utils.jq({obj:this._inner.extra});
+    Manager.prototype.utils.jq({obj:this.data.extra});
 
-    delete opts.path_;
     delete opts.on_;
-    delete opts.extra_;
-
-    return opts;
    },
    extendData:function(opts){
     var d={};
@@ -414,19 +407,12 @@
   $.extend(Manager.prototype,Events);
   //add events to base object
   $.extend(Manager.prototype.Base.prototype,Events,{
-   method:function(s,p){
+   get:function(s,p){
     if(!this[s])
-     throw new Error('[FW] No such method ('+s+') of '+this.getInner('PATH'));
-    return this[s](p);
-   },
-   getInner:function(s){
-    return this._inner[s];
-   },
-   getOpts:function(){
-    return this.options;
-   },
-   getProps:function(){
-    return this.props;
+     throw new Error('[FW] No such field or method "'+s+'" in '+this.data.path_);
+    if($.type(this[s])==='function')
+     return this[s](p);else
+     return this[s];
    }
   });
  }

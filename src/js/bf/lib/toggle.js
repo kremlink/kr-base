@@ -66,15 +66,16 @@
  }
  //-----------------
  $.extend(Toggle.prototype,{
-  init:function(opts){
+  init:function(){
    var self=this;
 
-   self.options=$.extend(true,self.options,opts);
+   self.options=$.extend(true,self.options,self.data.options);
 
    self.props=$.extend(true,self.props,{
-    delegateCallers:$.isPlainObject(opts.callers),
-    pops:$(opts.pops),
-    overlay:$(opts.overlay)
+    delegateCallers:$.isPlainObject(self.data.callers),
+    pops:$(self.data.pops),
+    closers:$(self.data.closers),
+    overlay:$(self.data.overlay)
    });
 
    self.prepare();
@@ -85,9 +86,8 @@
    if(self.options.hideClick)
     self.options.hideClick=$(self.options.hideClick);
 
-   self.props.delegateContainer=self.props.delegateCallers?$(self.options.callers.container):null;
-   self.props.callers=self.props.delegateCallers?null:$(self.options.callers);
-   self.props.closers=$(self.options.closers);
+   self.props.delegateContainer=self.props.delegateCallers?$(self.data.callers.container):null;
+   self.props.callers=self.props.delegateCallers?null:$(self.data.callers);
    if(!self.props.pops.length)
    {
     if(self.options.alone&&self.options.aloneFlag)
@@ -106,7 +106,7 @@
     }
    }
 
-   self.props.onePop=self.props.pops.length==1
+   self.props.onePop=self.props.pops.length===1
     ||!self.props.delegateCallers&&self.props.pops.length>self.props.callers.length;
 
    self.setCallers();
@@ -149,7 +149,7 @@
     callers:self.props.callers,
     pops:self.props.pops,
     activeClass:self.options.activeClass,
-    callersSelector:self.props.delegateCallers?self.options.callers.selector:null,
+    callersSelector:self.props.delegateCallers?self.data.callers.selector:null,
     delegateContainer:self.props.delegateContainer
    }
   },
@@ -159,7 +159,7 @@
    if(self.options.esc)
    {
     self.props.doc.on(self.options.keydown,function(e){
-     if(e.which==27)
+     if(e.which===27)
       self.hideAll();
     });
    }
@@ -173,7 +173,7 @@
     self.options.hideClick.on(self.options.click,function(e){
      var target=$(e.target);
      
-     if(!target.closest(self.props.delegateCallers?self.options.callers.selector:self.props.callers).length&&!target.closest(self.props.pops).length)
+     if(!target.closest(self.props.delegateCallers?self.data.callers.selector:self.props.callers).length&&!target.closest(self.props.pops).length)
       self.hideAll();
     });
    }
@@ -183,7 +183,7 @@
    
    if(self.props.delegateCallers)
    {
-    self.props.delegateContainer.on(self.options.click,self.options.callers.selector,function(e){
+    self.props.delegateContainer.on(self.options.click,self.data.callers.selector,function(e){
      var obj=$(this);
 
      if(!$(e.target).closest(self.options.ignore).length)
@@ -300,7 +300,7 @@
     activeClick:opts.activeClick,
     activeClass:self.options.activeClass,
     callers:self.props.callers,
-    callersSelector:self.props.delegateCallers?self.options.callers.selector:null,
+    callersSelector:self.props.delegateCallers?self.data.callers.selector:null,
     delegateContainer:self.props.delegateContainer,
     overlay:self.props.overlay,
     data:opts.data
@@ -349,7 +349,7 @@
     overlay:self.props.overlay,
     activeClass:self.options.activeClass,
     callers:self.props.callers,
-    callersSelector:self.props.delegateCallers?self.options.callers.selector:null,
+    callersSelector:self.props.delegateCallers?self.data.callers.selector:null,
     delegateContainer:self.props.delegateContainer,
     data:opts.data
    }]);
@@ -386,7 +386,7 @@
   setActive:function(){
    var self=this,
        callers=self.props.delegateCallers?
-        self.props.delegateContainer.find(self.options.callers.selector):
+        self.props.delegateContainer.find(self.data.callers.selector):
         self.props.callers;
 
    if(!self.options.active.length)
