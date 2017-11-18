@@ -59,7 +59,7 @@
    tabIndex:-1,
    delegateContainer:null,
    callers:null,
-   closers:null,
+   closers:null,//init
    onePop:null,
    delegateNoPop:null//delegate callers + no pop
   };

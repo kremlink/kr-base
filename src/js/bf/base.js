@@ -255,7 +255,7 @@
      throw new Error('[FW] No data provided ('+own.object+': '+own.data+')');
 
     obj=new Tmp();
-    this.utils.init.call(obj,$.extend(
+    this.utils.init.call(obj,$.extend(true,
      data,
      {on_:own.on,path_:own.dest},
      own.extra
