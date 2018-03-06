@@ -133,6 +133,19 @@
     return flag;
    }
   },
+  fValid:function(opts){
+   var obj={};
+
+   if(opts.file)
+   {
+    if(opts.file.size>opts.max)
+     obj.max=true;
+    if(!opts.type.test(opts.file.type)&&!opts.type.test(opts.file.name))
+     obj.type=true;
+   }
+
+   return obj;
+  },
   scrollDim:function(){
    var div=$('<div style="position:absolute;overflow-y:scroll;"></div>').prependTo('body'),
     dim=div.width()-div.css('overflow-y','auto').width();
