@@ -224,6 +224,9 @@
     }
    }).bind(this)();
 
+   if(data&&data.off_)//don't set; use it theApp=... settings
+    return;
+
    if(!own.lib)
    {
     if($.type(own.object)==='function'&&own.call)
