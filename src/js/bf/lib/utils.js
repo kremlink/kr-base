@@ -98,7 +98,7 @@
   form:{
    validate:function(opts){
     var flag=true,
-        check=opts.form?opts.form.find(opts.inputs):opts.check,
+        check=opts.check?opts.check:opts.form.find(opts.inputs),
         ignore=opts.ignore?opts.ignore:function(){return false;},
         block=opts.block?opts.block:function(){return false;},
         error=opts.error?opts.error:function(){};
