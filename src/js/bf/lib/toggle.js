@@ -236,7 +236,7 @@
    var self=this,
        i=self.props.onePop?0:opts.index;
 
-   if(i<0||i>self.props.pops.length-1||opts.blockedClick||!self.options.toggle&&!self.options.activeClick&&opts.activeClick)
+   if(i<0||i>self.props.pops.length-1&&!self.props.delegateCallers||opts.blockedClick||!self.options.toggle&&!self.options.activeClick&&opts.activeClick)
     return;
 
    if(!opts.settingActive&&self.options.toggle&&opts.activeClick)
