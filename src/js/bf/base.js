@@ -260,7 +260,7 @@
     obj=new Tmp();
     this.utils.init.call(obj,$.extend(true,
      data,
-     {on_:own.on,path_:own.dest},
+     {on_:own.on,set_:own.data,path_:own.dest},
      own.extra
     ));
     obj.init();
