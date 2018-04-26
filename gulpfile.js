@@ -256,7 +256,7 @@ gulp.task('css',function(){
 gulp.task('css-min',function(){
  return gulp.src(options.src.css.min)
   .pipe(rename({suffix:'.min'}))
-  .pipe(cleanCSS())
+  .pipe(cleanCSS({processImport:false}))
   .pipe(gulp.dest(options.dest.css));
 });
 
