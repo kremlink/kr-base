@@ -105,7 +105,7 @@ var gulp=require('gulp'),
    dest:'src/js'
   },
   zip:{
-   src:['src/*'],
+   src:['src/**'],
    srcOnly:['src/!(.idea|_dev)'],
    dest:'./'
   }
