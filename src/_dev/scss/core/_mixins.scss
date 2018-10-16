@@ -1,27 +1,21 @@
 @mixin trf($arg,$what:''){
-  @if($what==''){@include vendor(transform,$arg,('-webkit-', ''));}
-  @else{@include vendor(transform-origin,$arg,('-webkit-', ''));}
+  @if($what==''){@include vendor(transform,$arg,(''));}
+  @else{@include vendor(transform-origin,$arg,(''));}
 }
 
 @mixin trs($arg,$what:''){
   @if($what=='')
   {
-    @include vendor(transition,$arg,('-webkit-', ''));
+    @include vendor(transition,$arg,(''));
   }@else
   {
-    @if($what=='de'){@include vendor(transition-delay,$arg,('-webkit-', ''));}
-    @if($what=='du'){@include vendor(transition-duration,$arg,('-webkit-', ''));}
+    @if($what=='de'){@include vendor(transition-delay,$arg,(''));}
+    @if($what=='du'){@include vendor(transition-duration,$arg,(''));}
   }
 }
 
 @mixin flx($arg,$what){
-  @if($arg==display)
-  {
-    @include vendor($arg,$what,('-webkit-', ''),false);
-  }@else
-  {
-    @include vendor($arg,$what,('-webkit-', ''));
-  }
+  @include vendor($arg,$what,(''));
 }
 //---------
 @mixin modal($c){
@@ -137,21 +131,11 @@
 }
 
 @mixin anim($a,$t:''){
-  @if($t=='')
-  {
-    -webkit-animation:$a;
-    animation:$a;
-  }@else
-  {
-    -webkit-animation-#{$t}:$a;
-    animation-#{$t}:$a;
-  }
+  @if($t==''){@include vendor(animation,$a,(''));}@else
+  {@include vendor(animation-#{$t},$a,(''));}
 }
 
 @mixin kfs($n){
-  @-webkit-keyframes #{$n}{
-    @content;
-  }
   @keyframes #{$n}{
     @content;
   }
@@ -194,7 +178,7 @@
 
   @if($d)
   {background:url(#{map-get($p,img)}) $l-pos no-repeat;}@else
-  {background-position:$l-pos;}
+{background-position:$l-pos;}
 }
 
 @mixin sprite-each($p,$b:null){//':before'
