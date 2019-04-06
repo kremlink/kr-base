@@ -165,7 +165,7 @@
    var callback=opts.callback||function(){},
     src=$.type(opts.src)==='array'?opts.src:[opts.src],
     img,
-    imgs;
+    imgs=$({});
 
    for(var i=0;i<src.length;i++)
    {
