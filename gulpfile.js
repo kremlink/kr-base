@@ -94,14 +94,14 @@ var gulp=require('gulp'),
   clean:'dest',
   paths:{//TODO:add more
    base:'G:/Sashino/PapkaSasha/z-o-t/template/html5-template/new-lib',
-   open:{
+   /*open:{
     slider:'/NEW/slider-carousel/all-main.js'
    },
    lib:{
     slider:'/NEW/slider-carousel/slider.js',
     carousel:'/NEW/slider-carousel/carousel.js',
     img:'/utils/imagesloaded.js'
-   },
+   },*/
    dest:'src/js'
   },
   zip:{
@@ -170,12 +170,26 @@ function data(){
   .pipe(gulp.dest(options.src.css.base));
 }
 
-function unignore(all){
- var stream=gulp.src(options.src.css.data)
+function ignore(all){
+//a==a: unignore everything; a==p: unignore partials; a==p+smth: ignore everything in partials folder except smth
+ var a=getArg('--p'),
+ what=null,
+ stream;
+ 
+ a=a?(a===true?null:(a==='a'||a==='p'||~a.indexOf('p+')?a:null)):null;
+ if(a)
+ {
+  what=~a.indexOf('p+')?'_'+a.split('+')[1]:null;
+  stream=gulp.src(options.src.css.data)
   .pipe(flatmap(function(stream,file){
    var s=String(file.contents);
     
-   file.contents=new Buffer(s.replace(/@ignore/,''));
+   if(a==='a')
+    file.contents=new Buffer(s.replace(/@ignore/,''));
+   if(a==='p'&&~file.path.indexOf('partials'))
+    file.contents=new Buffer(s.replace(/@ignore/,''));
+   if(what&&~file.path.indexOf('partials')&&!~file.path.indexOf(what)&&!~file.path.indexOf('_all'))
+    file.contents=new Buffer(s.replace(/(@path.+)(\*\/)/,'$1@ignore$2'));
     
    return stream;
   }))
@@ -184,8 +198,7 @@ function unignore(all){
   stream.on('end',function(){
    all();
   });
-  
-  return stream;
+ }
 }
 
 function jsAdd(){//e.type=changed|added|deleted
@@ -227,8 +240,8 @@ gulp.task('s-add',function(){
  data();
 });
 gulp.task('s-all',sassAll);
-gulp.task('s-unign',function(){
- return unignore(sassAll);
+gulp.task('s-ign',function(){
+ ignore(sassAll);
 });
 
 gulp.task('fonts',function(){
@@ -273,32 +286,6 @@ gulp.task('js-min',function(){
   .pipe(concat(options.dest.js.min))
   .pipe(uglify({preserveComments:'some'/*,output : {beautify : true}*/}))
   .pipe(gulp.dest(options.dest.js.src));
-});
-
-gulp.task('open',function(){
- var a=getArg('--p');
- 
- if(a)
-  open(options.paths.base+options.paths.open[a],"notepad++");else
-  console.log('Nothing to open');
-});
-
-gulp.task('lib',function(){
- var a=getArg('--p'),
-  p;
- 
- if(a)
- {
-  p=options.paths.lib[a];
-  return gulp.src(options.paths.base+p)
-   .pipe(gulp.dest(options.paths.dest+(~p.indexOf('/utils')?'/lib':'/bf/lib')))
-   .on('end',function(e){
-    jsAdd();
-   });
- }else
- {
-  console.log('No file to get specified');
- }
 });
 
 gulp.task('zip',function(){
@@ -404,3 +391,29 @@ gulp.task('sprite',function(){
    sassAll('sprites');
   });
 });
+
+/*gulp.task('open',function(){
+ var a=getArg('--p');
+ 
+ if(a)
+  open(options.paths.base+options.paths.open[a],"notepad++");else
+  console.log('Nothing to open');
+});
+
+gulp.task('lib',function(){
+ var a=getArg('--p'),
+  p;
+ 
+ if(a)
+ {
+  p=options.paths.lib[a];
+  return gulp.src(options.paths.base+p)
+   .pipe(gulp.dest(options.paths.dest+(~p.indexOf('/utils')?'/lib':'/bf/lib')))
+   .on('end',function(e){
+    jsAdd();
+   });
+ }else
+ {
+  console.log('No file to get specified');
+ }
+});*/
