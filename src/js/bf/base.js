@@ -169,7 +169,7 @@
     defArr=[
      {name:'data',value:''},
      {name:'object',value:''},
-     {name:'extra',value:null},
+     {name:'add',value:null},
      {name:'on',value:{}},
      {name:'call',value:false},
      {name:'set',value:true},
@@ -236,8 +236,8 @@
       name:own.data
      };
 
-     if(own.extra)
-      t.extra=own.extra;
+     if(own.add)
+      t.extra=own.add;
 
      if(own.constr)
       obj=new own.object(t);else
@@ -261,7 +261,7 @@
     this.utils.init.call(obj,$.extend(true,
      data,
      {on_:own.on,set_:own.data,path_:own.dest},
-     own.extra
+     own.add
     ));
     obj.init();
    }

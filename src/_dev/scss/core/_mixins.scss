@@ -123,10 +123,10 @@
 @mixin grad-ref($c:getc(ref),$b:0px,$h:1px,$d:false,$p1:1px,$p2:1px){
   @if($d)
   {
-    @include vendor(background,'linear-gradient(90deg,#{$c} #{$p1},transparent #{$p1},transparent #{$p2}) left calc(100% - #{$b})/#{$p1+$p2} #{$h} repeat-x',('-webkit-', ''),false);
+    @include vendor(background,'linear-gradient(90deg,#{$c} #{$p1},transparent #{$p1},transparent #{$p2}) left calc(100% - #{$b})/#{$p1+$p2} #{$h} repeat-x',(''),false);
   }@else
   {
-    @include vendor(background,'linear-gradient(90deg,#{$c},#{$c}) left calc(100% - #{$b})/100% #{$h} repeat-x',('-webkit-', ''),false);
+    @include vendor(background,'linear-gradient(90deg,#{$c},#{$c}) left calc(100% - #{$b})/100% #{$h} repeat-x',(''),false);
   }
 }
 
