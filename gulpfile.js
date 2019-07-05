@@ -245,7 +245,10 @@ function jsModuleAdd(){//e.type=changed|added|deleted
      path.basename=~path.basename.indexOf('-d')?a+'-d':a;
      path.extname='.js';
     }))
-    .pipe(gulp.dest(options.src.js.moduleBase+a));
+    .pipe(gulp.dest(options.src.js.moduleBase+a))
+    .on('end',function(){
+     jsAdd();
+    });
   }
  }else
  {
