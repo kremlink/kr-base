@@ -17,6 +17,12 @@
 @mixin flx($arg,$what){
   @include vendor($arg,$what,(''));
 }
+
+@mixin pk($s:''){
+  @media(min-width:$pkw + $s){
+    @content;
+  }
+}
 //---------
 @mixin modal($c){
   body{
