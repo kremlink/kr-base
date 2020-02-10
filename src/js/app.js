@@ -1,11 +1,5 @@
-(function(factory){
-  factory(jQuery,theApp);
-}(function($,mgr){
- 'use strict';
+import {app} from './bf/base.js';
+import {config} from './config.js';
 
- mgr.overrideData();
-
- $(function(){
-  mgr.trigger('app:ready',[mgr.get('shared.modules')]);
- });
-}));
+app.overrideData(config.data);
+app.trigger('app:ready',app.get('helpers.html').data('app'));

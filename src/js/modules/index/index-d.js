@@ -1,15 +1,14 @@
-(function (factory) {
- 'use strict';
+import {app} from '../../bf/base.js';
 
- factory(jQuery,theApp);
-}(function($,mgr){
- mgr.utils.extendData({
-  obj:mgr.data,
+ app.extendData({
+  obj:app.get('data'),
   field:'index',
   data:{
-   smth:3
+   toggle:{
+    callers:document,
+    options:{
+     toggle:true
+    }
+   }
   }
  });
- 
- return mgr.data;
-}));

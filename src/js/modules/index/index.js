@@ -1,12 +1,5 @@
-(function (factory){
- factory(jQuery,theApp);
-}(function($,mgr){
- 'use strict';
+import {app} from '../../bf/base.js';
 
- mgr.on('app:ready',function(e,modules){
-  if(~modules.indexOf('index'))
-  {
-
-  }
- });
-}));
+app.on('app:ready',(e,p)=>{
+ console.log(p);
+});
