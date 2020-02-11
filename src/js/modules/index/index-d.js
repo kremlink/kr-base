@@ -5,9 +5,12 @@ import {app} from '../../bf/base.js';
   field:'index',
   data:{
    toggle:{
-    callers:document,
+    callers:'html',
     options:{
      toggle:true
+    },
+    extra:{
+     $m:'head'
     }
    }
   }

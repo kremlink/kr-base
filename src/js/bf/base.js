@@ -23,7 +23,7 @@ class App{
   call:false,
   set:true,
   lib:true,
-  collection:true,
+  collection:false,
   notify:true,
   constr:false,
   dest:'',
@@ -75,12 +75,14 @@ class App{
   return {tmp:tmp,name:name};
  }
 
- _objInit(opts){
-  opts.obj.data=opts.data;
+ _objInit({obj,data}){
+  obj.data=data;
 
-  Object.assign(opts.obj.on,opts.on_);
-  this._jq({obj:opts.obj.data.extra});
-  delete opts.data.on_;
+  for(let [x,y] of Object.entries(data.on_))
+   obj.on(x,y);
+
+  this._jq(obj.data.extra);
+  delete data.on_;
  }
 
  _jqType(obj)
@@ -88,28 +90,22 @@ class App{
   return /^\$/.test(obj)?'jq':$.type(obj);
  }
 
- _jq(opts){
-  let obj=opts.obj;
-
+ _jq(obj){
   if(Array.isArray(obj))
   {
    for(let i=0;i<obj.length;i++)
-    this._jqTypes({
-     obj:obj,
-     val:i
-    });
+    this._jqTypes(obj[i]);
   }else
   {
-   if(typeof obj==='object')
+   if($.isPlainObject(obj))
    {
     for(let x of Object.keys(obj))
     {
      if(this._jqType(x)==='jq')
      {
-      this._jqTypes({
-       obj:obj,
-       val:x
-      });
+      if($.type(obj[x])==='string')
+       obj[x]=$(obj[x]);
+      this._jqTypes(obj[x]);
      }
     }
    }
@@ -118,18 +114,12 @@ class App{
   return obj;
  }
 
- _jqTypes(opts){
-  let obj=opts.obj,
-   s=opts.val;
-
-  if(Array.isArray(obj[s])||!Array.isArray(obj[s])&&typeof obj[s]==='object')
-   this._jq({obj:obj[s]});
-
-  if(typeof obj[s]==='string')
-   obj[s]=$(obj[s]);
+ _jqTypes(obj){
+  if(Array.isArray(obj)||$.isPlainObject(obj))
+   this._jq(obj);
  }
 
- overrideData(data){
+ overrideData(data={}){
   let t;
 
   for(let x of Object.entries(data))
@@ -236,7 +226,7 @@ class App{
    if($.type(own.data)==='string')
    {
     d=this.get('data'+sp+own.data);
-    return own.call||own.lib?this._jq({obj:$.extend(true,{},d)}):d;
+    return own.call||own.lib?this._jq($.extend(true,{},d)):d;
    }else
    {
     return own.data;
@@ -322,37 +312,16 @@ let events={
  }
 };
 
-Object.assign(App.prototype,events,
- {
-  Base:class{
-   get(s,p){
-    if(!this[s])
-     throw new Error('[FW] No such field or method "'+s+'" in '+this.data.path_);
-    return typeof this[s]==='function'?this[s](p):this[s];
-   }
-  }
- }
- /*,{
- Base:function(){},
- extend:function(Child,Parent){
-  let F=function(){};
+class Base{}
 
-  Parent=Parent||this.Base;
+Object.assign(App.prototype,events,{Base:Base});
 
-  F.prototype=Parent.prototype;
-  Child.prototype=new F();
-  Child.prototype.constructor=Child;
-  Child.parent=Parent.prototype;
- }
-}*/);
-
-
-/*Object.assign(App.prototype.Base.prototype,events,{
+Object.assign(Base.prototype,events,{
  get:function(s,p){
   if(!this[s])
    throw new Error('[FW] No such field or method "'+s+'" in '+this.data.path_);
   return typeof this[s]==='function'?this[s](p):this[s];
  }
-});*/
+});
 
 export const app=new App(config);

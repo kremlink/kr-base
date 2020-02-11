@@ -391,3 +391,6 @@ $.extend(Toggle.prototype,{
   }
  }
 });
+//-----
+app.set({dest:'lib.Toggle',object:Toggle});
+//app.set['Toggle']=Toggle;
