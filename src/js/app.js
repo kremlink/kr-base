@@ -11,10 +11,8 @@ app.init({
  mConfig:{
   index:indexData
  },
- plugins:[Toggle]
+ plugins:[Toggle],
+ settings:{}
 });
 //------------------------
-//index(modules);
-/*
-app.set({dest:'lib.Toggle',object:Toggle});
-*/
+index(app,modules);

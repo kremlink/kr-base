@@ -10,9 +10,9 @@
 import {config} from '../config.js';
 
 class App{
+ _splitBy='.';
  settings={
-  imgPath:'images/',
-  splitBy:'.'
+  imgPath:'images/'
  };
 
  setSettings={
@@ -41,19 +41,15 @@ class App{
 
  _notifyOverride=true;
 
- constructor(config){
-  Object.assign(this.settings,config.settings);
- }
-
  _what(st){
-  let sp=this.settings.splitBy,
+  let sp=this._splitBy,
    reg='(^objects\\'+sp+')|(^helpers\\'+sp+')|(^data$)|(^data\\'+sp+')|(^lib\\'+sp+')|(^utils\\'+sp+')';
 
   return (st.match(new RegExp(reg))?st:'objects'+sp+st).split(sp);
  }
 
  _getDestination(opts){
-  let arr=opts.s.split(this.settings.splitBy),
+  let arr=opts.s.split(this._splitBy),
    l=arr.length,
    tmp=this,
    name=arr[l-1];
@@ -124,14 +120,16 @@ class App{
 
   for(let [x,y] of Object.entries(data))
   {
-   t=this.get('data'+this.settings.splitBy+x);
+   t=this.get('data'+this._splitBy+x);
    if(!t)
-    t=this.set({dest:'data'+this.settings.splitBy+x,object:{}});
+    t=this.set({dest:'data'+this._splitBy+x,object:{}});
    $.extend(true,t,y);
   }
  }
 
- init({mConfig,plugins}){
+ init({mConfig,plugins,settings={}}){
+  Object.assign(this.settings,settings);
+
   for(let [x,y] of Object.entries(mConfig))
   {
    this.extendData({
@@ -141,9 +139,18 @@ class App{
    });
   }
 
-  this.overrideData(config.data);
-  debugger;
-  console.log(plugins[0].name);
+  this.overrideData(config);
+
+  plugins.forEach((name)=>{
+   this.set({dest:'lib.'+name.name,object:name});
+   Object.assign(name.prototype,events,{
+    get(s='',p={}){
+     if(!this[s])
+      throw new Error('[FW] No such field or method "'+s+'" in '+this.data.path_);
+     return typeof this[s]==='function'?this[s](p):this[s];
+    }
+   });
+  });
  }
 
  extendData({field,obj,data,ignore=false}){
@@ -204,7 +211,7 @@ class App{
  }
 
  set(opts){//opts:setSettings
-  let sp=this.settings.splitBy,
+  let sp=this._splitBy,
    data,
    obj,
    Tmp,
@@ -324,15 +331,6 @@ let events={
  }
 };
 
-class Base{
- get(s,p){
-  if(!this[s])
-   throw new Error('[FW] No such field or method "'+s+'" in '+this.data.path_);
-  return typeof this[s]==='function'?this[s](p):this[s];
- }
-}
-
 Object.assign(App.prototype,events);
-Object.assign(Base.prototype,events);
 
-export const app=new App(config);
+export const app=new App();
