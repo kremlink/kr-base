@@ -122,30 +122,42 @@ class App{
  overrideData(data={}){
   let t;
 
-  for(let x of Object.entries(data))
+  for(let [x,y] of Object.entries(data))
   {
-   t=this.get('data'+this.settings.splitBy+x[0]);
+   t=this.get('data'+this.settings.splitBy+x);
    if(!t)
-    t=this.set({dest:'data'+this.settings.splitBy+x[0],object:{}});
-   $.extend(true,t,x[1]);
+    t=this.set({dest:'data'+this.settings.splitBy+x,object:{}});
+   $.extend(true,t,y);
   }
  }
 
- extendData(opts){
-  let d={};
+ init({mConfig,plugins}){
+  for(let [x,y] of Object.entries(mConfig))
+  {
+   this.extendData({
+    obj:this.get('data'),
+    field:x,
+    data:y
+   });
+  }
 
-  if(opts.field in opts.obj&&!opts.ignore)
-   throw new Error('[FW] Data to extend already has field "'+opts.field+'"');
-
-  d[opts.field]=opts.data;
-  $.extend(true,opts.obj,d);
+  this.overrideData(config.data);
+  debugger;
+  console.log(plugins[0].name);
  }
 
- toggleNotifications(f){
+ extendData({field,obj,data,ignore=false}){
+  if(field in obj&&!ignore)
+   throw new Error('[FW] Data to extend already has field "'+field+'"');
+
+  $.extend(true,obj,{[field]:data});
+ }
+
+ toggleNotifications(f=true){
   this._notifyOverride=f;
  }
 
- get(st){
+ get(st=''){
   let arr=this._what(st),
    l=arr.length,
    tmp=this;
@@ -166,11 +178,11 @@ class App{
   return tmp;
  }
 
- unset(st,destr){
+ unset(st='',destr=''){
   let ovr=this._notifyOverride,
    dest,
    destroy=function(obj){
-    if(obj[destr]&&$.type(dest.tmp[obj[destr]])==='function')
+    if(obj[destr]&&typeof dest.tmp[obj[destr]]==='function')
      obj[destr]();
    };
 
@@ -191,7 +203,7 @@ class App{
   delete dest.tmp[dest.name];
  }
 
- set(opts){
+ set(opts){//opts:setSettings
   let sp=this.settings.splitBy,
    data,
    obj,
@@ -312,16 +324,15 @@ let events={
  }
 };
 
-class Base{}
-
-Object.assign(App.prototype,events,{Base:Base});
-
-Object.assign(Base.prototype,events,{
- get:function(s,p){
+class Base{
+ get(s,p){
   if(!this[s])
    throw new Error('[FW] No such field or method "'+s+'" in '+this.data.path_);
   return typeof this[s]==='function'?this[s](p):this[s];
  }
-});
+}
+
+Object.assign(App.prototype,events);
+Object.assign(Base.prototype,events);
 
 export const app=new App(config);

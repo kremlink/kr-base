@@ -2,9 +2,7 @@
 
  //in delegated mode only a sole popup permitted! (or no popup at all)
  //there should be only one active caller in delegated or sole popup mode! there can be exceptions though
-import {app} from '../base.js';
-
-class Toggle extends app.Base{
+export class Toggle{
  "use strict";
 
  options={
@@ -391,6 +389,3 @@ $.extend(Toggle.prototype,{
   }
  }
 });
-//-----
-app.set({dest:'lib.Toggle',object:Toggle});
-//app.set['Toggle']=Toggle;

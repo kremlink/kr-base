@@ -1,8 +1,6 @@
-import {app} from '../../bf/base.js';
-
-app.on('app:ready',(e,p)=>{
- if(p!=='index')
+export function index(app,modules){
+ if(!~modules.indexOf('index'))
   return;
 
  app.set({data:'index.toggle',object:'Toggle'});
-});
+}
