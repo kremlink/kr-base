@@ -9,7 +9,7 @@
 */
 import {config} from '../config.js';
 
-class App{
+class Base{
  _splitBy='.';
  settings={
   imgPath:'images/'
@@ -331,6 +331,6 @@ let events={
  }
 };
 
-Object.assign(App.prototype,events);
+Object.assign(Base.prototype,events);
 
-export const app=new App();
+export const base=new Base();

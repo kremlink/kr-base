@@ -1,4 +1,7 @@
-export function index(app,modules){
+import {data} from './index-d.js';
+export {data} from './index-d.js';
+
+export function init(app,modules){
  if(!~modules.indexOf('index'))
   return;
 
