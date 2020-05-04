@@ -17,38 +17,22 @@ var gulp=require('gulp'),
  unzip=require('gulp-unzip'),
  svgmin=require('gulp-svgmin'),
  cheerio=require('gulp-cheerio'),
- svgstore=require('gulp-svgstore');
+ svgstore=require('gulp-svgstore'),
+ webpack=require('webpack'),
+ webpackStream=require('webpack-stream');
 
-flag='src',//flag='src' or flag='dest'
+var flag='src',//flag='src' or flag='dest'
  options={
   url:'https://github.com/kremlink/kr-base/archive/master.zip',
   src:{
    html:{
-    src:'src/_dev/html/*.html',
-    scripts:'src/_dev/html/components/src.html'
+    src:'src/_dev/html/*.html'//,
+    //scripts:'src/_dev/html/components/src.html'
    },
    js:{
     src:'src/js/**/*.js',
     baseStr:'src\\\\',
-    min:[
-     'src/js/lib/underscore.js',
-     'src/js/lib/!(_*|underscore|jquery).js',
-     'src/js/lib/*/[^_]*.js',
-     'src/js/bf/base.js',
-     'src/js/bf/base-bb.js',
-     'src/js/bf/lib/[^_]*.js',
-     'src/js/aggregator.js',
-     'src/js/modules/**/[^_]*-d.js',
-     'src/js/modules/**/[^_]*-m.js',
-     'src/js/modules/**/[^_]*-c.js',
-     'src/js/modules/**/[^_]*-v.js',
-     'src/js/modules/**/[^_]*-r.js',
-     'src/js/modules/**/[^_]*-cmp.js',
-     'src/js/modules/**/!(_*|*-d|*-m|*-c|*-v|*-r|*-cmp).js',
-     'src/js/app-data.js',
-     'src/js/router.js',
-     'src/js/app.js'
-    ],
+    entry:'src/js/app.js',
     moduleBase:'src/js/modules/',
     moduleTmplReplace:'\\[\\[name\\]\\]',
     moduleTmpl:['src/_dev/jsTmpl.mustache','src/_dev/jsTmpl-d.mustache'],
@@ -205,18 +189,6 @@ function ignore(all){
  }
 }
 
-function jsAdd(){//e.type=changed|added|deleted
- var scripts='';
-
- options.src.js.min.forEach(function(f){
-  glob.sync(f).forEach(function(f1){
-   scripts+='<script src="'+f1.substring(f1.indexOf(options.src.js.baseStr)+options.src.js.baseStr.length)+'"></script>\n';
-  });
- });
-
- fs.writeFileSync(options.src.html.scripts,scripts);
-}
-
 function getFolders(dir){
  return fs.readdirSync(dir).filter(function(file){
   return fs.statSync(path.join(dir,file)).isDirectory();
@@ -245,10 +217,7 @@ function jsModuleAdd(){//e.type=changed|added|deleted
      path.basename=~path.basename.indexOf('-d')?a+'-d':a;
      path.extname='.js';
     }))
-    .pipe(gulp.dest(options.src.js.moduleBase+a))
-    .on('end',function(){
-     jsAdd();
-    });
+    .pipe(gulp.dest(options.src.js.moduleBase+a));
   }
  }else
  {
@@ -274,7 +243,6 @@ gulp.task('clean',function(cb){
  del(options.clean,cb);
 });
 
-gulp.task('js-add',jsAdd);
 gulp.task('jsm-add',jsModuleAdd);
 
 gulp.task('s-data',data);
@@ -326,10 +294,40 @@ gulp.task('js',function(){
 });
 
 gulp.task('js-min',function(){
- return gulp.src(options.src.js.min)
-  .pipe(concat(options.dest.js.min))
-  .pipe(uglify({preserveComments:'some'/*,output : {beautify : true}*/}))
-  .pipe(gulp.dest(options.dest.js.src));
+ console.log('No minifier available');
+ /*"devDependencies": {
+  "@babel/core": "^7.9.6",
+   "@babel/plugin-proposal-class-properties": "^7.8.3",
+   "@babel/plugin-syntax-class-properties": "^7.8.3",
+   "@babel/preset-env": "^7.9.6",
+   "babel-loader": "^8.1.0",
+   "webpack": "^4.43.0",
+   "webpack-stream": "^5.2.1"
+ }*/
+ /*return gulp.src(options.src.js.entry)
+  .pipe(webpackStream({
+   output:{
+    filename:'app.js',
+   },
+   module:{
+    rules:[
+     {
+      test:/\.(js)$/,
+      exclude:/(node_modules)/,
+      use: {
+       loader:'babel-loader',
+       options:{
+        presets:['@babel/preset-env'],
+        plugins:['@babel/plugin-syntax-class-properties','@babel/plugin-proposal-class-properties']
+       }
+      }
+     }
+    ]
+   }
+  }))
+  .pipe(uglify({preserveComments:'some'}))
+  .pipe(rename(options.dest.js.min))
+  .pipe(gulp.dest(options.dest.js.src));*/
 });
 
 gulp.task('zip',function(){
