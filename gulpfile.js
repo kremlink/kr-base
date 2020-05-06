@@ -17,9 +17,9 @@ var gulp=require('gulp'),
  unzip=require('gulp-unzip'),
  svgmin=require('gulp-svgmin'),
  cheerio=require('gulp-cheerio'),
- svgstore=require('gulp-svgstore'),
- webpack=require('webpack'),
- webpackStream=require('webpack-stream');
+ svgstore=require('gulp-svgstore');
+ /*webpack=require('webpack'),
+ webpackStream=require('webpack-stream');*/
 
 var flag='src',//flag='src' or flag='dest'
  options={
