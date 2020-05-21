@@ -18,8 +18,8 @@ var gulp=require('gulp'),
  svgmin=require('gulp-svgmin'),
  cheerio=require('gulp-cheerio'),
  svgstore=require('gulp-svgstore');
- /*webpack=require('webpack'),
- webpackStream=require('webpack-stream');*/
+//webpack=require('webpack'),
+//webpackStream=require('webpack-stream');
 
 var flag='src',//flag='src' or flag='dest'
  options={
@@ -366,7 +366,8 @@ gulp.task('img',function(){
 });
 
 gulp.task('ssprite',function(){
- var a=getArg('--p')||'shared';
+ var a=getArg('--p')||'shared',
+  styles={};
 
  return gulp.src(options.src.imgs.svgSpriteBits+a+'-sprite/*.svg')
   .pipe(svgmin(function(file){
@@ -376,12 +377,14 @@ gulp.task('ssprite',function(){
     js2svg:{
      pretty:true
     },
-    plugins:[{
-     cleanupIDs:{
-      prefix:prefix+'-',
-      minify:true
-     }
-    }]
+    plugins:[
+     {convertStyleToAttrs:false},
+     {
+      cleanupIDs:{
+       prefix:prefix+'-',
+       minify:true
+      }
+     }]
    }
   }))
   .pipe(cheerio({
@@ -395,14 +398,23 @@ gulp.task('ssprite',function(){
      $('style,title').remove();
     }
 
-    $('svg').removeAttr('viewBox');
+    //$('svg').removeAttr('viewBox');
 
     $('#Слой_2,#svg-export').removeAttr('id');
+    styles['icon-'+a+'-'+path.basename(file.relative,path.extname(file.relative))]=$('svg').attr('style');
    },
    parserOptions:{xmlMode:true}
   }))
   .pipe(rename({prefix:'icon-'+a+'-'}))
   .pipe(svgstore({inlineSvg:true}))
+  .pipe(cheerio({
+   run:function($,file){
+    $('symbol').each(function(){
+     $(this).attr('style',styles[$(this).attr('id')]);
+    });
+   },
+   parserOptions:{xmlMode:true}
+  }))
   .pipe(gulp.dest(options.src.imgs.svgBase));
 });
 
