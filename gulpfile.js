@@ -409,6 +409,8 @@ gulp.task('ssprite',function(){
   .pipe(svgstore({inlineSvg:true}))
   .pipe(cheerio({
    run:function($,file){
+    $('svg').prepend('<defs></defs>');
+    $('defs').append($('clipPath,filter,mask'));
     $('symbol').each(function(){
      $(this).attr('style',styles[$(this).attr('id')]);
     });
