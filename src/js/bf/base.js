@@ -239,7 +239,7 @@ class Base{
     own.set=false;
   }
 
-  if(!own.object)
+  if(own.object===undefined)
    throw new Error('[FW] Nothing to set');
 
   own=Object.assign({},this.setSettings,own);
