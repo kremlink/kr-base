@@ -284,7 +284,7 @@ class Base{
    Tmp=this.get('lib.'+own.object);
    if(!Tmp)
     throw new Error('[FW] No function found ('+own.object+')');
-   if(!own.dest)
+   if(!own.dest&&own.set)
     throw new Error('[FW] Destination not set ('+own.object+')');
 
    if(!own.collection&&!data)
