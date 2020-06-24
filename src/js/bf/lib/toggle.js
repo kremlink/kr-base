@@ -1,50 +1,50 @@
 /*!by Alexander Kremlev*/
 
- //in delegated mode only a sole popup permitted! (or no popup at all)
- //there should be only one active caller in delegated or sole popup mode! there can be exceptions though
+//in delegated mode only a sole popup permitted! (or no popup at all)
+//there should be only one active caller in delegated or sole popup mode! there can be exceptions though
 export class Toggle{
- "use strict";
+ constructor(){
+  this.options={
+   activeClass:'active',
+   activeOverlayClass:'active',
+   disabledClass:'disabled',
+   initEvent:'init',
+   showEvent:'show',
+   showOnceEvent:'showOnce',
+   hideEvent:'hide',
+   hideAllEvent:'hideAll',
+   keydown:'keydown.toggle',
+   click:'click.toggle',
+   active:[],
+   ignore:'',
+   esc:false,
+   alone:false,
+   aloneFlag:false,//make 1 or callers.length fake pop(s) for all callers when no pops provided; true means 1
+   toggle:false,
+   hideClick:false,
+   activeClick:false
+  };
 
- options={
-  activeClass:'active',
-  activeOverlayClass:'active',
-  disabledClass:'disabled',
-  initEvent:'init',
-  showEvent:'show',
-  showOnceEvent:'showOnce',
-  hideEvent:'hide',
-  hideAllEvent:'hideAll',
-  keydown:'keydown.toggle',
-  click:'click.toggle',
-  active:[],
-  ignore:'',
-  esc:false,
-  alone:false,
-  aloneFlag:false,//make 1 or callers.length fake pop(s) for all callers when no pops provided; true means 1
-  toggle:false,
-  hideClick:false,
-  activeClick:false
- };
-
- props={
-  delegateCallers:null,//init
-  pops:null,//init
-  overlay:null,//init
-  shown:[],
-  shownOnce:[],
-  oldIndex:-1,
-  oldCaller:null,
-  activeCaller:null,
-  activePop:null,
-  doc:$(document),
-  win:$(window),
-  tabIndex:-1,
-  delegateContainer:null,
-  callers:null,
-  closers:null,//init
-  onePop:null,
-  delegateNoPop:null//delegate callers + no pop
- };
+  this.props={
+   delegateCallers:null,//init
+   pops:null,//init
+   overlay:null,//init
+   shown:[],
+   shownOnce:[],
+   oldIndex:-1,
+   oldCaller:null,
+   activeCaller:null,
+   activePop:null,
+   doc:$(document),
+   win:$(window),
+   tabIndex:-1,
+   delegateContainer:null,
+   callers:null,
+   closers:null,//init
+   onePop:null,
+   delegateNoPop:null//delegate callers + no pop
+  };
+ }
 }
 //-----------------
 $.extend(Toggle.prototype,{

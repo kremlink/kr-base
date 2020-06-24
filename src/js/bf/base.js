@@ -10,36 +10,38 @@
 import {config} from '../config.js';
 
 class Base{
- _splitBy='.';
- settings={
-  imgPath:'images/'
- };
+ constructor(){
+  this._splitBy='.';
 
- setSettings={
-  data:'',
-  object:'',
-  add:null,
-  on:{},
-  call:false,
-  set:true,
-  lib:true,
-  collection:false,
-  notify:true,
-  constr:false,
-  dest:'',
-  off:false
- };
+  this.settings={
+   imgPath:'images/'
+  };
 
- objects={};//newly created objects go here
- lib={};//modules
- data={};//initial data for objects
- helpers={
-  win:$(window),
-  doc:$(document),
-  html:$('html')
- };
+  this.setSettings={
+   data:'',
+   object:'',
+   add:null,
+   on:{},
+   call:false,
+   set:true,
+   lib:true,
+   collection:false,
+   notify:true,
+   constr:false,
+   dest:'',
+   off:false
+  };
 
- _notifyOverride=true;
+  this.objects={};
+  this.lib={};
+  this.data={};
+  this.helpers={
+   win:$(window),
+   doc:$(document),
+   html:$('html')
+  };
+  this._notifyOverride=true;
+ }
 
  _what(st){
   let sp=this._splitBy,
