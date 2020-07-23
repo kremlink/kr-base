@@ -133,14 +133,20 @@ class Base{
   Object.assign(this.settings,settings);
 
   plugins.forEach((name)=>{
-   this.set({dest:'lib.'+name.name,object:name});
-   Object.assign(name.prototype,events,{
-    get(s='',p={}){
-     if(!this[s])
-      throw new Error('[FW] No such field or method "'+s+'" in '+this.data.path_);
-     return typeof this[s]==='function'?this[s](p):this[s];
-    }
-   });
+   if(typeof(name)==='function')
+   {
+    this.set({dest:'lib.'+name.name,object:name});
+    Object.assign(name.prototype,events,{
+     get(s='',p={}){
+      if(!this[s])
+       throw new Error('[FW] No such field or method "'+s+'" in '+this.data.path_);
+      return typeof this[s]==='function'?this[s](p):this[s];
+     }
+    });
+   }else
+   {
+    this.set({dest:'lib.'+name.name,object:name.object});
+   }
   });
  }
 

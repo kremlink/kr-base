@@ -8,6 +8,7 @@ const modules=app.get('helpers.html').data('app').split(',');
 //------------------------
 app.init({
  plugins:[Toggle],
+ //plugins:[{object:utils,name:'utils'}],
  settings:{}
 });
 //------------------------
