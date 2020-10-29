@@ -1,6 +1,6 @@
 import {app} from './bf/base.js';
 
-import * as index from './modules/index/index.js';
+import * as index from './modules/index-page/view.js';
 
 import {Toggle} from './bf/lib/toggle.js';
 //import {utils} from './bf/lib/utils.js';//or add it to app as follows
@@ -14,5 +14,6 @@ app.init({
 });
 //------------------------
 $(()=>{
- index.init(app,modules);
+ if(~modules.indexOf('index'))
+  index.init();
 });
