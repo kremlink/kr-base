@@ -1,6 +1,7 @@
 var gulp=require('gulp'),
+ rollup = require('rollup'),
  cleanCSS=require('gulp-clean-css'),
- uglify=require('gulp-uglify'),
+ minify=require('gulp-minify'),
  rename=require('gulp-rename'),
  concat=require('gulp-concat'),
  spritesmith=require('gulp.spritesmith'),
@@ -18,8 +19,6 @@ var gulp=require('gulp'),
  svgmin=require('gulp-svgmin'),
  cheerio=require('gulp-cheerio'),
  svgstore=require('gulp-svgstore');
-//webpack=require('webpack'),
-//webpackStream=require('webpack-stream');
 
 var flag='src',//flag='src' or flag='dest'
  options={
@@ -32,6 +31,7 @@ var flag='src',//flag='src' or flag='dest'
    js:{
     src:'src/js/**/*.js',
     baseStr:'src\\\\',
+    lib:'src/js/lib/pack/*.js',
     entry:'src/js/app.js',
     moduleBase:'src/js/modules/',
     moduleTmplReplace:'\\[\\[name\\]\\]',
@@ -66,6 +66,8 @@ var flag='src',//flag='src' or flag='dest'
    html:flag+'/',
    js:{
     src:flag+'/js/',
+    min_l:'built-l.min.js',
+    built:'built.js',
     min:'built.min.js'
    },
    css:flag+'/css/',
@@ -293,41 +295,23 @@ gulp.task('js',function(){
  }
 });
 
-gulp.task('js-min',function(){
- console.log('No minifier available');
- /*"devDependencies": {
-  "@babel/core": "^7.9.6",
-   "@babel/plugin-proposal-class-properties": "^7.8.3",
-   "@babel/plugin-syntax-class-properties": "^7.8.3",
-   "@babel/preset-env": "^7.9.6",
-   "babel-loader": "^8.1.0",
-   "webpack": "^4.43.0",
-   "webpack-stream": "^5.2.1"
- }*/
- /*return gulp.src(options.src.js.entry)
-  .pipe(webpackStream({
-   output:{
-    filename:'app.js',
-   },
-   module:{
-    rules:[
-     {
-      test:/\.(js)$/,
-      exclude:/(node_modules)/,
-      use: {
-       loader:'babel-loader',
-       options:{
-        presets:['@babel/preset-env'],
-        plugins:['@babel/plugin-syntax-class-properties','@babel/plugin-proposal-class-properties']
-       }
-      }
-     }
-    ]
-   }
-  }))
-  .pipe(uglify({preserveComments:'some'}))
-  .pipe(rename(options.dest.js.min))
-  .pipe(gulp.dest(options.dest.js.src));*/
+gulp.task('js-min',()=>{
+ let pref='_';
+
+ return rollup.rollup({
+  input:options.src.js.entry
+ }).then(bundle=>{
+  return bundle.write({
+   file:options.dest.js.src+pref+options.dest.js.min,
+   format:'iife'
+  });
+ }).then(()=>{
+  gulp.src([options.src.js.lib,options.dest.js.src+pref+options.dest.js.min])
+   .pipe(concat(options.dest.js.built))
+   .pipe(minify({preserveComments:'some',noSource:true}))
+   .pipe(gulp.dest(options.dest.js.src))
+   .on('end',()=>del(options.dest.js.src+pref+options.dest.js.min));
+ });
 });
 
 gulp.task('zip',function(){
@@ -390,7 +374,7 @@ gulp.task('ssprite',function(){
   .pipe(cheerio({
    run:function($,file){
     if(0)
-    //if(!/^no-/.test(file.relative))
+     //if(!/^no-/.test(file.relative))
     {
      $('[fill]').removeAttr('fill');
      $('[style]').removeAttr('style');

@@ -12,14 +12,17 @@
     "gulp-download": "~0.0.1",
     "gulp-file-include": "~1.1.0",
     "gulp-flatmap": "~1.0.0",
+    "gulp-minify": "^3.1.0",
     "gulp-rename": "~1.2.2",
     "gulp-svgmin": "~1.2.4",
     "gulp-svgstore": "~6.1.0",
-    "gulp-uglify": "~1.5.4",
     "gulp-unzip": "~0.2.0",
     "gulp-zip": "~4.0.0",
     "gulp.spritesmith": "~6.2.1",
     "open": "~7.0.0",
+    "rollup": "^2.58.0",
+    "rollup-stream": "^1.24.1",
     "vinyl-buffer": "~1.0.0"
-  }
+  },
+  "dependencies": {}
 }
