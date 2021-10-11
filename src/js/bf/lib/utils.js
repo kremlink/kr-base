@@ -235,8 +235,8 @@ utils={
   return obj;
  },
  scrollDim:function(){
-  var div=$('<div style="position:absolute;overflow-y:scroll;"></div>').prependTo('body'),
-   dim=div.width()-div.css('overflow-y','auto').width();
+  var div=$('<div style="position:absolute;width:100px;height:100px;top:-100px;overflow:scroll;"></div>').prependTo('body'),
+   dim=div[0].offsetWidth-div[0].clientWidth;
 
   div.remove();
 
